@@ -1,52 +1,35 @@
 import os
 import re
-import speech_recognition as sr
-from pydub import AudioSegment
-from gpt import mejorar_texto
+from gpt import voice_transcription, create_script
 
 # Variables
 nombre_del_archivo = "Programar es para todos?"
-nombre_del_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_del_archivo)  # Limpia el nombre del archivo
+# Limpia el nombre del archivo
+nombre_del_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_del_archivo)
 audio_file = f"voice_notes/{nombre_del_archivo}.m4a"
-wav_file = f"voice_notes/{nombre_del_archivo}.wav"
 text_file = f"text_notes/{nombre_del_archivo}.txt"
 ai_text_file = f"ai_text_notes/{nombre_del_archivo}.txt"
 
 # Crear directorio si no existe
 os.makedirs(os.path.dirname(text_file), exist_ok=True)
+os.makedirs(os.path.dirname(ai_text_file), exist_ok=True)
 
-# Convierte M4A a WAV
-print("Convirtiendo audio...")
-audio = AudioSegment.from_file(audio_file, format="m4a")
-audio.export(wav_file, format="wav")
-
-# Usar archivo WAV con speech_recognition
-print("Procesando reconocimiento de voz...")
-r = sr.Recognizer()
-with sr.AudioFile(wav_file) as source:
-    audio = r.record(source)  # lee todo el archivo
 
 try:
     # Mostrar loader
     print("Reconociendo... ")
+    # Inicializar el reconocimiento de voz
+    original_text = voice_transcription(audio_file)
     
-    text = r.recognize_google(audio, language="es-MX")
-    print("\nTexto reconocido")
-
     # Guardar el texto en un archivo
     with open(text_file, "w", encoding='utf-8') as file:
-        file.write(text)
-    print(f"Texto guardado en archivo: {text_file}")
-    
-    ai_text = mejorar_texto(text)
-    
+        file.write(original_text)
+    print(f"Texto original guardado en archivo: {text_file}")
+
+    ai_text = create_script(original_text)
+
     with open(ai_text_file, "w", encoding='utf-8') as file:
         file.write(ai_text)
-    print(f"Texto guardado en archivo: {text_file}")
-
-except sr.UnknownValueError:
-    print("Google Speech Recognition no pudo entender el audio")
-except sr.RequestError as e:
-    print(f"No se pudo solicitar resultados del servicio de reconocimiento de voz de Google; {e}")
+    print(f"Texto con ai guardado en archivo: {text_file}")
 except Exception as e:
     print(f"Error: {e}")
