@@ -1,5 +1,5 @@
 
-import os 
+import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -9,18 +9,24 @@ organization = os.getenv('OPENAI_ORGANIZATION')
 project = os.getenv('OPENAI_PROYJECT')
 api_key = os.getenv('OPENAI_API_KEY')
 
+
 client = OpenAI(
     organization=organization,
     project=project,
     api_key=api_key
 )
 
+
 def create_script(text: str):
     print("Creando script...")
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Eres experta en entender e interpretar una idea y convertirla en un script que enganche a miles de personas. Mejora la claridad y legibilidad de este texto, corrige redundania, basandote en su contexto. Manten el miso tono e intencion del narrador. Despues, como output, crea un script cinematografico inspirador que sea un monologo o narracion donde pueda hablar minimo 2 minutos y maximo 3 con el siguiente texto:"},
+            {"role": "system", "content": """Eres experta en entender e interpretar una idea y convertirla en un script que enganche a miles de personas. 
+             Mejora la claridad y legibilidad de este texto, corrige redundania, basandote en su contexto. 
+             Manten el miso tono e intencion del narrador. Utiliza lenguaje cotidiano de Mexico sonando lo más humano posible. Despues, como output, 
+             crea un script cinematografico inspirador que sea un monologo o narracion donde pueda hablar minimo 2 minutos y maximo 3 con el siguiente texto:
+             """},
             {"role": "user", "content": text}
         ]
     )
