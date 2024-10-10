@@ -1,7 +1,17 @@
+<div align="center">
 
 # Audio Transcriber and Script Generator
 
 Este programa procesa archivos de audio, permitiéndote transcribirlos, crear scripts cinematográficos basados en la transcripción y extraer los puntos clave de una reunión, evento o video largo.
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
+![Logo](assets/logo.png)
+
+</div>
+
+
+
 
 ## Características
 
@@ -101,4 +111,3 @@ Si el archivo de transcripción o el script ya existen, el programa omitirá su 
 ## Contribuciones
 
 Si deseas contribuir al proyecto, puedes enviar un pull request o crear un issue en el repositorio.
-
