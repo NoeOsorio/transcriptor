@@ -1,2 +1,5 @@
 **venv/
 .env
+ai_text_notes/
+text_notes/
+voice_notes/

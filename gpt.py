@@ -17,15 +17,19 @@ client = OpenAI(
 )
 
 
-def create_script(text: str):
-    print("Creando script...")
+def create_script(text: str, tone: str, duracion: int = 2):
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": """Eres experta en entender e interpretar una idea y convertirla en un script que enganche a miles de personas. 
+            {"role": "system", "content": """Eres experta en entender e interpretar una idea y 
+             convertirla en un script que enganche a miles de personas. 
              Mejora la claridad y legibilidad de este texto, corrige redundania, basandote en su contexto. 
-             Manten el miso tono e intencion del narrador. Utiliza lenguaje cotidiano de Mexico sonando lo más humano posible. Despues, como output, 
-             crea un script cinematografico inspirador que sea un monologo o narracion donde pueda hablar minimo 2 minutos y maximo 3 con el siguiente texto:
+             Manten el miso tono e intencion del narrador. Utiliza lenguaje cotidiano y cercano (sin llegar a ser vulgar o irrespetuoso)
+             sonando lo más humano posible."""},
+            {"role": "system", "content": f"""
+             Despues, como output, crea un script cinematografico con un tono {tone} que sea un monologo
+             o narracion donde pueda hablar aproximadamente {duracion} minutos con el siguiente texto. Recuerda que debe tener
+             un inicio con un gancho, un desarrollo y un cierre que deje al espectador con ganas de más.
              """},
             {"role": "user", "content": text}
         ]
