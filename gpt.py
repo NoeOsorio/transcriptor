@@ -40,15 +40,13 @@ def create_script(text: str, tone: str, duracion: int = 2):
 
 def voice_transcription(audio_file: str):
     try:
-        print("Iniciando transcripción de audio...")
         with open(audio_file, "rb") as audio:
-            print("Transcribiendo audio...")
             transcript = client.audio.transcriptions.create(
                 model="whisper-1",
                 file=audio,
-                response_format="text"
+                response_format="text",
+
             )
-        print("Transcripción del audio completada.")
         # Aseguramos que la respuesta es un diccionario y obtenemos el campo 'text'
         return transcript['text'] if 'text' in transcript else transcript
     except Exception as e:
@@ -77,21 +75,36 @@ def split_text(text, max_tokens=1500):
     return chunks
 
 # Función para extraer puntos clave
+
+
 def extract_key_points(text: str):
     print("Extrayendo puntos clave del texto...")
-    text_chunks = split_text(text, max_tokens=1500)  # Dividir en fragmentos de máximo 1500 tokens
+    # Dividir en fragmentos de máximo 1500 tokens
+    text_chunks = split_text(text, max_tokens=1500)
 
     # Construir los mensajes basados en los chunks de texto
-    messages = [{"role": "system", "content": """
+    messages = [
+
+        {"role": "system", "content": """
                     Cuando te proporcione una transcripción de una conversación, tu tarea será identificar primero el objetivo principal de la conversación y resumirlo en uno o dos parrafos. 
                     A continuación, extraerás los puntos más importantes de la discusión y los presentarás como una lista no ordenada, donde cada punto incluirá una explicación o contexto adicional para mayor claridad. 
                     Mantén un tono profesional y demuestra un nivel de maestría en la redacción, asegurándote de que el resumen sea claro, preciso y esté orientado a proporcionar información útil y accionable. 
                     Si la conversación involucra a múltiples personas, enfócate en extraer los puntos clave relacionados con las decisiones, estrategias o acciones acordadas, priorizando el contexto de la conversación.
                     Puedes extenderte lo necesario para que los puntos clave sean claros y comprensibles, pero evita agregar información irrelevante o redundante. Explica de forma extensa cada punto clave.
-                    """}]
-    
+                    """},
+        {"role": "system", "content": """Mejora la claridad y legibilidad 
+             de este texto, corrige redundancia, basándote en su contexto. Mantén el mismo tono e intención del narrador. 
+             Utiliza lenguaje cotidiano y cercano (sin llegar a ser vulgar o irrespetuoso), sonando lo más humano posible."""},
+        {"role": "system", "content": """
+                 El output se dividira en el siguiente formato:
+                 titulo, objetivo principal, contexto (quien habla, cual es el tema principal, de que se habla, etc), puntos clave, siguientes pasos, recomendaciones, conclusiones.
+                 Quiero que sea claro, que cualquiera que lea el resumen pueda entender de que se trata la conversación y que se pueda tomar decisiones a partir de la información proporcionada.
+                 Dale un formato muy vistos, llamativo y profesional con MD, similar al que usarias para u README.md en un repositorio de GitHub (El archivo final sera en formato MD).
+                 """}]
+
     # Agregar cada chunk como un mensaje del usuario
-    messages.extend([{"role": "user", "content": chunk} for chunk in text_chunks])
+    messages.extend([{"role": "user", "content": chunk}
+                    for chunk in text_chunks])
 
     try:
         # Realizar la solicitud a OpenAI
@@ -104,4 +117,3 @@ def extract_key_points(text: str):
     except Exception as e:
         print(f"Error al procesar los chunks: {e}")
         return ""
-
