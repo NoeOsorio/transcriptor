@@ -1,3 +1,4 @@
+
 <div align="center">
 
 # Audio Transcriber and Script Generator
@@ -9,9 +10,6 @@ Este programa procesa archivos de audio, permitiéndote transcribirlos, crear sc
 ![Logo](assets/logo.png)
 
 </div>
-
-
-
 
 ## Características
 
@@ -60,6 +58,15 @@ El programa puede ejecutarse desde la línea de comandos utilizando diferentes a
 | `--audio`          | Nombre del archivo de audio (sin la extensión).                        |
 | `--duracion`       | Define la duración aproximada del script en minutos.                   |
 
+### Selección Interactiva sin Argumentos
+
+Además de utilizar las opciones de línea de comandos, ahora puedes ejecutar el programa sin ninguna etiqueta (flag), y este te guiará de forma interactiva para seleccionar:
+
+1. El archivo de audio que deseas procesar, mostrando los archivos disponibles en la carpeta `voice_notes/`.
+2. Las acciones que deseas realizar (transcripción, generar script o extraer puntos clave), con un menú interactivo donde puedes seleccionar una o varias opciones.
+
+Esta funcionalidad es útil cuando prefieres no especificar las opciones manualmente en la línea de comandos.
+
 ### Ejemplos de Uso
 
 #### 1. **Solo transcripción de audio**
@@ -97,6 +104,15 @@ Ejecuta todo el flujo: transcribir el audio, generar un script y extraer los pun
 python main.py --audio "mi_audio" --keypoints --tone "Motivacional" --duracion 10
 ```
 
+### Ejemplo de Uso Sin Argumentos
+
+Si prefieres no utilizar etiquetas, puedes ejecutar el siguiente comando:
+```bash
+python main.py
+```
+
+Esto te permitirá seleccionar el archivo de audio y las acciones a realizar de forma interactiva.
+
 ## Estructura de Archivos
 
 - **voice_notes/**: Aquí debes colocar los archivos de audio (e.g. `mi_audio.m4a`).
@@ -107,6 +123,16 @@ python main.py --audio "mi_audio" --keypoints --tone "Motivacional" --duracion 1
 ## Optimización
 
 Si el archivo de transcripción o el script ya existen, el programa omitirá su creación para ahorrar recursos, a menos que se especifique explícitamente con `--transcript` o `--script`.
+
+## Instalación del Entorno Virtual
+
+Para configurar el entorno virtual y los paquetes necesarios, ejecuta el script `setup.sh`:
+
+```bash
+./setup.sh
+```
+
+Este script creará y activará un entorno virtual, y luego instalará las dependencias listadas en `requirements.txt`.
 
 ## Contribuciones
 
