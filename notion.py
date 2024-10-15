@@ -170,6 +170,10 @@ def guardar_en_notion_en_misma_pagina(titulo, transcripcion=None, script=None, k
                     }
                 ]
             },
+            icon={
+                "type": "emoji",
+                "emoji": "📝"
+                },
             children=bloques_en_lotes[0]  # Primer lote de hasta 100 bloques
         )
 

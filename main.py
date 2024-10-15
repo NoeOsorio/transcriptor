@@ -68,9 +68,6 @@ try:
                     file.write(original_text)
                 pbar.update(1)
         print(f"Texto original guardado en archivo: {text_file}")
-    else:
-        print(f"El archivo de transcripción {
-              text_file} ya existe. Omite la transcripción para ahorrar recursos.")
 
     # Comprobar si el archivo de script ya existe
     if args.script or not os.path.exists(ai_text_file):
@@ -81,9 +78,6 @@ try:
         with open(ai_text_file, "w", encoding='utf-8') as file:
             file.write(ai_text)
         print(f"Texto con AI guardado en archivo: {ai_text_file}")
-    else:
-        print(f"El archivo del script {
-              ai_text_file} ya existe. Omite la creación de script para ahorrar recursos.")
 
     # Si se solicitó extraer puntos clave
     if args.keypoints:
@@ -106,7 +100,6 @@ try:
             key_points = file.read()
         try:
             procesar_y_guardar_en_notion(nombre_del_archivo, transcripcion, script, key_points)
-            print("Guardado en Notion exitoso.")
         except Exception as e:
             print(f"Error al guardar en Notion: {e}")    
 
