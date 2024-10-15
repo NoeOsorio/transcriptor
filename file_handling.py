@@ -17,7 +17,8 @@ def seleccionar_acciones():
             choices=[
                 ("Transcribir el audio", 'transcript'),
                 ("Generar script", 'script'),
-                ("Extraer puntos clave", 'keypoints')
+                ("Extraer puntos clave", 'keypoints'),
+                ("Guardar en Notion", 'notion')
             ],
         )
     ]
@@ -27,3 +28,4 @@ def seleccionar_acciones():
 def crear_directorios(paths):
     for path in paths:
         os.makedirs(os.path.dirname(path), exist_ok=True)
+
