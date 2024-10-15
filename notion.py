@@ -314,8 +314,3 @@ def convertir_md_a_bloques(texto_md, max_length=2000):
                 })
 
     return bloques
-
-
-# Ejemplo de uso:
-guardar_en_notion(
-    "# Título en MD\nEste es un contenido en formato Markdown.", "Mi página en Notion")
