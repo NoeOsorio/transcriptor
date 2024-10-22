@@ -3,7 +3,7 @@ import re
 import os
 from tqdm import tqdm
 from audio_processing import divide_audio, eliminar_fragmentos
-from file_handling import seleccionar_audio, seleccionar_acciones, crear_directorios
+from file_handling import seleccionar_audio, seleccionar_acciones, crear_directorios, seleccionar_fuente_audio
 from gpt import voice_transcription, create_script, extract_key_points
 from notion import procesar_y_guardar_en_notion
 
@@ -29,34 +29,31 @@ parser.add_argument('-n', '--notion', action="store_true",
 
 args = parser.parse_args()
 
+# Seleccionar la fuente de audio
+audio_file = seleccionar_fuente_audio()
+nombre_del_archivo = os.path.basename(audio_file).rsplit('.', 1)[0]
+
 # Si no se especifica una acción (-s, -t o -k), mostrar un menú seleccionable
-if not any([args.script, args.transcript, args.keypoints]):
+if not any([args.script, args.transcript, args.keypoints, args.notion]):
     acciones = seleccionar_acciones()
-    print(acciones)
     args.script = 'script' in acciones
     args.transcript = 'transcript' in acciones
     args.keypoints = 'keypoints' in acciones
     args.notion = 'notion' in acciones
 
-# Si no se especifica un archivo de audio, mostrar una lista seleccionable
-if not args.audio:
-    nombre_del_archivo = seleccionar_audio().replace(".m4a", "")
-else:
-    nombre_del_archivo = args.audio
-
 # Limpiar el nombre del archivo
 nombre_del_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_del_archivo)
-audio_file = f"voice_notes/{nombre_del_archivo}.m4a"
 text_file = f"transcriptions/{nombre_del_archivo}.txt"
 ai_text_file = f"ai_text_notes/{nombre_del_archivo}.txt"
 resumen_file = f"keypoints/{nombre_del_archivo}_keypoints.md"
+
 # Crear directorios si no existen
 crear_directorios([text_file, ai_text_file])
 segment_files: list = []
 
 try:
     # Comprobar si el archivo de transcripción ya existe
-    if args.transcript or not os.path.exists(text_file):
+    if args.transcript and not os.path.exists(text_file):
         print("Transcribiendo...")
         segment_files = divide_audio(audio_file)
 
@@ -70,7 +67,7 @@ try:
         print(f"Texto original guardado en archivo: {text_file}")
 
     # Comprobar si el archivo de script ya existe
-    if args.script or not os.path.exists(ai_text_file):
+    if args.script and not os.path.exists(ai_text_file):
         print("Creando script...")
         with open(text_file, 'r', encoding='utf-8') as file:
             original_text = file.read()
